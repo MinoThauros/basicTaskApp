@@ -10,29 +10,41 @@ import WeclomeScreen from "./components/welcomeScreen";
 
 export default function App() {
   const [Process,SetProcess]=useState(false);
-  const [newGoal, SetNewGoal]=useState([]);
+  const [Goals, SetNewGoals]=useState([]as String[]);
+  const [key,SetKey]=useState(1);
+  const [emptyGoals,SetEmptyGoals]=useState(false);
 
   const StartProcess=()=>{
     SetProcess(true);
     console.log('Button clicked')
   };
-
+  
 
   const goBack=()=>{
     SetProcess(false);
     console.log('we are back')
   };
+
+  const newId=()=>{
+    SetKey(key+1);
+  };
+
+  const MockArray : String[]=["salut","bye","lol","caca"];
+
+
   return(
     <View>
       <Modal visible={!Process}>
-      <WeclomeScreen onSetProcess={StartProcess}/>
-    </Modal>
-    <View>
-      <Text>
-        The Content will be here
-      </Text>
-      <Button title="go back" onPress={()=>{goBack()}}/>
-    </View>
+          <WeclomeScreen onSetProcess={StartProcess}/>
+      </Modal>
+      <View style={styles.title}>
+          {MockArray.map((goal)=>{<Text>{goal}</Text>})}
+        <Button title="go back" onPress={()=>{goBack()}}/>
+      </View>
+      {MockArray.map((goal)=>{return(<Text>{goal}</Text>)})}
+      <View>
+
+      </View>
     </View>
     
     
@@ -45,7 +57,7 @@ const styles = StyleSheet.create({
   },
   title:{
     padding:50,
-    backgroundColor:'red',
+    backgroundColor:'purple',
   },
   titleText:{
     textAlign:'center',
