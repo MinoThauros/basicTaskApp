@@ -16,9 +16,10 @@ export default function App() {
 
   const StartProcess=()=>{
     SetProcess(true);
+    SetEmptyGoals(true);//in order to control the value of the title depending on the state
     console.log('Button clicked')
   };
-  
+
 
   const goBack=()=>{
     SetProcess(false);
@@ -28,6 +29,13 @@ export default function App() {
   const newId=()=>{
     SetKey(key+1);
   };
+
+  const title=(isPastWelcomeScreen:Boolean)=>{
+    if (Process!=true){
+      return 
+    }
+  };
+
 
   const MockArray : String[]=["salut","bye","lol","caca"];
 
@@ -43,7 +51,7 @@ export default function App() {
       </View>
       {MockArray.map((goal)=>{return(<Text>{goal}</Text>)})}
       <View>
-
+        <Button title="Add your goals" onPress={()=>{}}/>
       </View>
     </View>
     
