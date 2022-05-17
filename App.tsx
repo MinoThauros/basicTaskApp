@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import WeclomeScreen from "./components/welcomeScreen";
 import GoalInput from "./components/GoalInput";
-
+import GoalItem from "./components/GoalItem";
 //we could use a function to make sure that states are sequencially; no "chevauchement"
 export default function App() {
   const [Process,SetProcess]=useState(false);
@@ -26,6 +26,9 @@ export default function App() {
   };
 
   const enteredText=(enteredText:string)=>{
+    if (enteredText==""){
+      return
+    }
     SetNewGoals((storedGoals:any[])=>[...storedGoals,{id:getCurrentKey(),value:enteredText}]);
     console.log(enteredText);
     addGoal()
@@ -56,9 +59,18 @@ export default function App() {
     }
   };
 
+  const DeleteItem=(key:number)=>{
+    //Goals.filter((item:any)=>item.id!=key);
+    //how to get id of touched item?
+    SetNewGoals((storedGoals:any[])=>storedGoals.filter((item:any)=>item.id!=key));
+    //to access and update state, always use SetState
+    console.log(key);
+  };
 
-  const MockArray : string[]=["salut","bye","lol","caca"];
-
+  const clearGoals=()=>{
+    SetNewGoals([]);
+  }
+  
 
   return(
     <View>
@@ -66,10 +78,15 @@ export default function App() {
           <WeclomeScreen onSetProcess={StartProcess}/>
       </Modal>
       <View style={styles.title}>
-          {Goals.map((goal)=>{<Text key={goal.id}>{goal}</Text>})}
         <Button title="go back" onPress={()=>{goBack()}}/>
       </View>
-      {Goals.map((goal)=>{return(<Text  key={goal.id} >{goal.value}</Text>)})}
+      {Goals.map((goal)=>{return(
+        <GoalItem
+          key={goal.id} 
+          title={goal.value}
+          onDelete={DeleteItem}
+          id={goal.id}
+          />)})}
       <View>
         <Button title="Add your goals" onPress={()=>{SetGoalInput(true)}}/>
       </View>
@@ -100,23 +117,10 @@ const styles = StyleSheet.create({
 })
 
 /**
- * general flow: welcome page w/ start goals button -> page with add goal button -> page with goal list
- * + make goal input process an overlay so that it prompts up temporarily and then goes back to the goal list
- * + Once new goal is written, link it to state in App.tsx and add a key prop to displayed value
- * + GoalInput component should have a button which sends new element to array AND creates new ID
+ * New cool shit we could add:
+ * * * + Allow goals to be dismissable after done + * * *; play with props.children
+ * + Style the title
+ * + Add background image
+ * + Make goals into thin cars like to-do
  */
 
-/** Tech concerns:
- * Add type-checking to props
- * add typechecking to list of tasks
- */
-
-/**
- * Execution:
- * a) create goal input component which:
- *  +prompted when the enterGOalbutton is clicked
- *  +sends the entered goal back to App.tsx
- * 
- * 
- * 
- */

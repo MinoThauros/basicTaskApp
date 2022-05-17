@@ -14,7 +14,7 @@ const GoalInput=(props:any)=>{
     const passingText=()=>{
         //pass the final value of the input to the parent component
         props.onEnteredText(incomingTyping);
-        SetIncomingTyping('');
+        SetIncomingTyping('');//clear the state before next input
 
     };
     
@@ -22,7 +22,7 @@ const GoalInput=(props:any)=>{
     return(
         <View style={styles.title}>
             <TextInput 
-        onChangeText={SetIncomingTyping}
+        onChangeText={SetIncomingTyping} //callback syntax
         placeholder="enter your next goal here"
         autoCorrect={false}
         />
