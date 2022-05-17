@@ -9,14 +9,24 @@ import {
 
 const GoalInput=(props:any)=>{
     //create a state within this component so that we only get last value
+    const [incomingTyping,SetIncomingTyping]=useState('');
+
+    const passingText=()=>{
+        //pass the final value of the input to the parent component
+        props.onEnteredText(incomingTyping);
+        SetIncomingTyping('');
+
+    };
+    
 
     return(
         <View style={styles.title}>
             <TextInput 
-        onChangeText={props.onEnteredText}
+        onChangeText={SetIncomingTyping}
         placeholder="enter your next goal here"
+        autoCorrect={false}
         />
-        <Button title="add" onPress={props.onAddGoal}/>
+        <Button title="add" onPress={()=>passingText()}/>
         </View>
 
 

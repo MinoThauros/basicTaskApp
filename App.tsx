@@ -9,9 +9,10 @@ import {
 import WeclomeScreen from "./components/welcomeScreen";
 import GoalInput from "./components/GoalInput";
 
+//we could use a function to make sure that states are sequencially; no "chevauchement"
 export default function App() {
   const [Process,SetProcess]=useState(false);
-  const [Goals, SetNewGoals]=useState([]as String[]);
+  const [Goals, SetNewGoals]=useState([]as any[]);
   const [key,SetKey]=useState(1);
   const [emptyGoals,SetEmptyGoals]=useState(false);
   const [goalInput, SetGoalInput]=useState(false);
@@ -20,12 +21,14 @@ export default function App() {
   const StartProcess=()=>{
     SetProcess(true);
     SetEmptyGoals(true);//in order to control the value of the title depending on the state
+    //need to define the title  as a function whose return varies depending on state
     console.log('Button clicked')
   };
 
   const enteredText=(enteredText:string)=>{
-    SetNewGoals((storedGoals)=>[...storedGoals,enteredText]);
+    SetNewGoals((storedGoals:any[])=>[...storedGoals,{id:getCurrentKey(),value:enteredText}]);
     console.log(enteredText);
+    addGoal()
     //issue: triggered on every even change from Goalinput
     //solution: separate concatenation and array state update
   };
@@ -41,27 +44,20 @@ export default function App() {
     SetGoalInput(false);
   };
 
+  const getCurrentKey=()=>{
+    const currentKey=key;
+    return currentKey;
 
-
-  const netItemMaker=(id:Number,element:String)=>{
-    //returns a new item with a new id
-    //we have the option of either structurally linking the new item to the array or not
-    // -or to simply add id as a key to the display
-    const newItem={
-      key:id,
-      value:element
-    };
-    return newItem;
   }
 
-  const title=(isPastWelcomeScreen:Boolean)=>{
+  const title=(isPastWelcomeScreen:boolean)=>{
     if (Process!=true){
       return 
     }
   };
 
 
-  const MockArray : String[]=["salut","bye","lol","caca"];
+  const MockArray : string[]=["salut","bye","lol","caca"];
 
 
   return(
@@ -70,10 +66,10 @@ export default function App() {
           <WeclomeScreen onSetProcess={StartProcess}/>
       </Modal>
       <View style={styles.title}>
-          {MockArray.map((goal)=>{<Text key={key}>{goal}</Text>})}
+          {Goals.map((goal)=>{<Text key={goal.id}>{goal}</Text>})}
         <Button title="go back" onPress={()=>{goBack()}}/>
       </View>
-      {Goals.map((goal)=>{return(<Text>{goal}</Text>)})}
+      {Goals.map((goal)=>{return(<Text  key={goal.id} >{goal.value}</Text>)})}
       <View>
         <Button title="Add your goals" onPress={()=>{SetGoalInput(true)}}/>
       </View>
